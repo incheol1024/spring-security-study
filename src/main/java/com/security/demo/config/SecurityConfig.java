@@ -14,19 +14,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .mvcMatchers("/admin").hasRole("admin")
-                .mvcMatchers("/", "info").permitAll()
+                .mvcMatchers("/", "info", "/create/**").permitAll()
                 .anyRequest().authenticated();
 
         http.formLogin();
         http.httpBasic();
     }
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("incheol").password("{noop}1111").roles("user")
-                .and()
-                .withUser("admin").password("{noop}2222").roles("admin");
 
-    }
 }

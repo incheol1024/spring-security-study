@@ -1,37 +1,24 @@
 package com.security.demo.auth;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
-
-@Controller
+@RestController
 @Slf4j
 public class UserController {
 
+    @Autowired
+    UserService userService;
 
-    @GetMapping("/")
-    public String index() {
-        log.info("user Controller...");
-        return "index";
+    @GetMapping("/create/{role}/{username}/{password}")
+    public UserEntity create(@ModelAttribute UserEntity userEntity) {
+        return userService.createUser(userEntity);
     }
 
-    @GetMapping("/info")
-    public String info(Model model, Principal principal) {
-        if (principal != null) {
-            model.addAttribute("userName", principal.getName());
-        }
-        return "info";
-    }
 
-    @GetMapping("/admin")
-    public String admin(Model model, Principal principal) {
-        if(principal != null) {
-            model.addAttribute("userName", principal.getName());
-        }
-        return "admin";
 
-    }
+
 }
