@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,6 +13,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -26,7 +30,7 @@ public class UserService implements UserDetailsService {
     }
 
     public UserEntity createUser(UserEntity userEntity) {
-        userEntity.setPassword("{noop}" + userEntity.getPassword());
+        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         UserEntity entity = userRepository.save(userEntity);
         return entity;
     }
